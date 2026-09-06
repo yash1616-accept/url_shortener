@@ -5,6 +5,9 @@ const UrlSchema = new mongoose.Schema({
     shortCode: { type: String, required: true, unique: true },
     clicks: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now },
+    webhookUrl: { type: String, default: null },
+    gaMeasurementId: { type: String, default: null },
+    gaApiSecret: { type: String, default: null },
 });
 
 // Prevent Mongoose from recompiling the model if it already exists
