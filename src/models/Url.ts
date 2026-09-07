@@ -8,6 +8,7 @@ const UrlSchema = new mongoose.Schema({
     webhookUrl: { type: String, default: null },
     gaMeasurementId: { type: String, default: null },
     gaApiSecret: { type: String, default: null },
+    ownerId: { type: String, required: true, index: true }, // Added for multi-tenant isolation
 });
 
 // Prevent Mongoose from recompiling the model if it already exists

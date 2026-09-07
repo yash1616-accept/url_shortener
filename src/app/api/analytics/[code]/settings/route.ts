@@ -1,12 +1,19 @@
 import { NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/mongodb';
 import Url from '@/models/Url';
+import { auth } from '@clerk/nextjs/server';
 
 export async function PATCH(
     request: Request,
     { params }: { params: Promise<{ code: string }> }
 ) {
     try {
+        const { userId, orgId } = await auth();
+        if (!userId) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+        const ownerId = orgId || userId;
+
         await dbConnect();
         const { code } = await params;
         const body = await request.json();
@@ -18,7 +25,7 @@ export async function PATCH(
         if (body.gaApiSecret !== undefined) updates.gaApiSecret = body.gaApiSecret;
 
         const updatedUrl = await Url.findOneAndUpdate(
-            { shortCode: code },
+            { shortCode: code, ownerId },
             { $set: updates },
             { new: true }
         ).lean();

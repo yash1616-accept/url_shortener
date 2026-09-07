@@ -2,17 +2,24 @@ import { NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/mongodb';
 import ClickAnalytics from '@/models/ClickAnalytics';
 import Url from '@/models/Url';
+import { auth } from '@clerk/nextjs/server';
 
 export async function GET(
     request: Request,
     { params }: { params: Promise<{ code: string }> }
 ) {
     try {
+        const { userId, orgId } = await auth();
+        if (!userId) {
+            return new NextResponse('Unauthorized', { status: 401 });
+        }
+        const ownerId = orgId || userId;
+
         await dbConnect();
         const { code } = await params;
 
-        // Verify URL exists
-        const urlDoc = await Url.findOne({ shortCode: code }).lean();
+        // Verify URL exists and belongs to user
+        const urlDoc = await Url.findOne({ shortCode: code, ownerId }).lean();
         if (!urlDoc) {
             return new NextResponse('Not found', { status: 404 });
         }

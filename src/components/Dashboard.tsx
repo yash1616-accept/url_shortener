@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Link2, Copy, Check, Loader2, ArrowRight, BarChart3 } from "lucide-react";
+import { Link2, Copy, Check, Loader2, ArrowRight, BarChart3, Settings as SettingsIcon } from "lucide-react";
 import Link from "next/link";
+import { UserButton, OrganizationSwitcher } from "@clerk/nextjs";
 
 type UrlData = {
   _id: string;
@@ -97,14 +98,37 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 selection:bg-zinc-200 dark:selection:bg-zinc-800 flex flex-col font-sans transition-colors duration-300">
-      {/* Header */}
       <header className="border-b border-zinc-200 dark:border-zinc-800/50 sticky top-0 bg-zinc-50/80 dark:bg-zinc-950/80 backdrop-blur-md z-10">
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <Link href="/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 rounded-lg bg-zinc-900 dark:bg-white flex items-center justify-center">
               <Link2 className="w-5 h-5 text-white dark:text-zinc-900" />
             </div>
             <span className="font-semibold text-lg tracking-tight">MiniLink</span>
+          </Link>
+          <div className="flex items-center gap-4">
+            <Link 
+              href="/settings" 
+              className="p-2 rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200 dark:hover:text-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              title="Settings & Profile"
+            >
+              <SettingsIcon className="w-5 h-5" />
+            </Link>
+            <OrganizationSwitcher 
+              hidePersonal={false} 
+              appearance={{
+                elements: {
+                  organizationSwitcherTrigger: "text-green-700 bg-green-100 hover:bg-green-200 dark:text-green-400 dark:bg-green-900/30 dark:hover:bg-green-900/50 px-3 py-1.5 rounded-lg transition-colors font-medium",
+                }
+              }}
+            />
+            <UserButton 
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: "w-9 h-9 shadow-sm border border-zinc-200 dark:border-zinc-700 hover:opacity-80 transition-opacity",
+                }
+              }}
+            />
           </div>
         </div>
       </header>
