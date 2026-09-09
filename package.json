@@ -12,6 +12,7 @@
     "@clerk/nextjs": "^7.9.1",
     "@clerk/shared": "^4.31.0",
     "@upstash/redis": "^1.38.4",
+    "framer-motion": "^13.2.0",
     "lucide-react": "^1.41.0",
     "mongodb": "^7.6.0",
     "mongoose": "^9.9.4",
