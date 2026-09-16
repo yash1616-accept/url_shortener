@@ -104,7 +104,7 @@ export default function Dashboard() {
             <div className="w-8 h-8 rounded-lg bg-zinc-900 dark:bg-white flex items-center justify-center">
               <Link2 className="w-5 h-5 text-white dark:text-zinc-900" />
             </div>
-            <span className="font-semibold text-lg tracking-tight">MiniLink</span>
+            <span className="font-semibold text-lg tracking-tight">Brua</span>
           </Link>
           <div className="flex items-center gap-4">
             <Link 

@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+  <br />
+    <img src="public/globe.svg" alt="Brua Logo" width="80" height="80" />
+  <br />
+  
+  # Brua: Enterprise URL Shortener
+  
+  **A highly scalable, multi-tenant B2B URL shortener built for modern marketing teams.**
+  
+  *Next.js 15 • Clerk Workspaces • Upstash Redis • MongoDB • Framer Motion*
+</div>
 
-## Getting Started
+---
 
-First, run the development server:
+## ⚡ Overview
 
+**Brua** is not just another URL shortener. It is a full-fledged enterprise marketing intelligence platform. Designed to handle massive traffic spikes with edge caching, Brua provides robust B2B organizational workspaces, deep geographical analytics, and real-time asynchronous webhooks—all wrapped in a premium, highly fluid user interface.
+
+## ✨ Key Features
+
+- **Multi-Tenant Workspaces:** Powered by Clerk, enabling users to switch seamlessly between personal projects and organizational team workspaces with strict data isolation.
+- **Sub-10ms Edge Caching:** Integrated with Upstash Redis (write-through cache) to ensure shortened URLs redirect globally in milliseconds without hitting the primary database.
+- **Real-Time Webhooks:** Fire asynchronous POST requests the exact millisecond a user clicks a link, perfect for updating external CRMs or triggering Zapier workflows.
+- **GA4 Measurement Protocol:** Natively pushes server-side click events directly into Google Analytics 4.
+- **Deep Analytics Dashboard:** A beautiful, responsive dashboard to track total clicks, geographic distribution, and device metrics, complete with 1-click CSV data exports.
+- **Premium UI/UX:** Built with Framer Motion and Tailwind CSS to deliver a sleek, dark-mode-first aesthetic inspired by top-tier developer tools.
+
+---
+
+## 🛠️ Architecture & Tech Stack
+
+- **Frontend:** Next.js 15 (App Router), React 19, Tailwind CSS v4, Framer Motion, Lucide Icons.
+- **Backend:** Next.js Serverless Route Handlers (`/api/*`).
+- **Database:** MongoDB (via Mongoose) for unstructured analytics data storage.
+- **Caching:** Upstash Redis for global edge resolution.
+- **Authentication:** Clerk `@clerk/nextjs` (Core 3) with Organization/Workspace support.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+Make sure you have Node.js 18+ installed. You will also need accounts for [MongoDB Atlas](https://www.mongodb.com/atlas), [Upstash](https://upstash.com/), and [Clerk](https://clerk.com/).
+
+### 1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/your-username/brua.git
+cd brua/url-shortener
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Configure Environment Variables
+Create a `.env.local` file in the root directory and add the following keys:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=/dashboard
+NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=/dashboard
 
-## Learn More
+# MongoDB Database
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/brua?retryWrites=true&w=majority
 
-To learn more about Next.js, take a look at the following resources:
+# Upstash Redis (Optional but recommended for speed)
+UPSTASH_REDIS_REST_URL=https://...
+UPSTASH_REDIS_REST_TOKEN=...
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Run the development server
+```bash
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Visit [http://localhost:3000](http://localhost:3000) to see the application!
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔒 Security & Data Isolation
+Brua is built with enterprise security in mind. Every shortened URL is strictly bound to an `ownerId` (either a User ID or an Organization ID). Next.js Middleware and server-side `auth()` checks ensure that a user can never view, edit, or access analytics for a link they do not explicitly own.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/your-username/brua/issues).
+
+## 📝 License
+This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.

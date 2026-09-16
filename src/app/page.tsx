@@ -39,7 +39,7 @@ export default function LandingPage() {
             <div className="w-9 h-9 rounded-xl bg-zinc-900 dark:bg-white flex items-center justify-center group-hover:scale-105 transition-transform shadow-lg shadow-black/10 dark:shadow-white/10">
               <Link2 className="w-5 h-5 text-white dark:text-[#09090b]" />
             </div>
-            <span className="font-bold text-xl tracking-tight">MiniLink</span>
+            <span className="font-bold text-xl tracking-tight">Brua</span>
           </div>
           
           <div className="flex items-center gap-4">
@@ -143,7 +143,7 @@ export default function LandingPage() {
                 <div className="h-4 w-32 bg-zinc-200 dark:bg-zinc-800 rounded animate-pulse" />
                 <div className="p-4 rounded-xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-white/5 flex items-center justify-between">
                   <div>
-                    <div className="text-lg font-bold text-zinc-800 dark:text-zinc-200">mini.link/campaign</div>
+                    <div className="text-lg font-bold text-zinc-800 dark:text-zinc-200">brua.link/campaign</div>
                     <div className="text-sm text-zinc-400">https://your-very-long-url.com/marketing/summer...</div>
                   </div>
                   <div className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-xs font-semibold">Active</div>
@@ -270,10 +270,10 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-6 flex flex-col items-center">
           <div className="flex items-center gap-2 mb-6 opacity-50 grayscale">
             <Link2 className="w-5 h-5 dark:text-white" />
-            <span className="font-bold tracking-tight dark:text-white">MiniLink</span>
+            <span className="font-bold tracking-tight dark:text-white">Brua</span>
           </div>
           <p className="text-zinc-500 dark:text-zinc-500 text-sm">
-            © {new Date().getFullYear()} MiniLink. All rights reserved.
+            © {new Date().getFullYear()} Brua. All rights reserved.
           </p>
         </div>
       </footer>
