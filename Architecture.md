@@ -41,23 +41,34 @@ graph TD
         Events -->|Fire POST Payload| Webhook(Customer's Internal CRM):::external
     end
     
+    %% URL Creation Flow
+    subgraph "URL Creation Flow (Write Path)"
+        Marketer -->|1. Submit Long URL| Dashboard[Next.js Dashboard UI]:::backend
+        Dashboard -->|2. POST /api/shorten| ShortenAPI[API: /api/shorten]:::backend
+        ShortenAPI -->|3. Collision Check & Save| Mongo
+        ShortenAPI -->|4. Cache Pre-warm| Redis
+    end
+    
     %% Dashboard Flow
     subgraph "Management & Reporting"
         Marketer -->|Authentication| Clerk[Clerk B2B Auth]:::external
-        Clerk -->|Validated Session| Dashboard[Next.js Dashboard UI]:::backend
+        Clerk -->|Validated Session| Dashboard
         Dashboard -->|Fetch Aggregated Data| Mongo
     end
 ```
 
 ## How to Explain This Diagram
 
-When an interviewer asks how the system works, break it down into these three sections:
+When an interviewer asks how the system works, break it down into these four sections:
 
-### 1. High-Speed Redirection Flow (The Core)
-> "When a user clicks a short link, the request hits Vercel's Edge Network. To achieve sub-10ms global redirects, the Next.js Serverless function immediately queries **Upstash Redis**. If it's a Cache Hit, we redirect the user instantly. If it's a Cache Miss, we query **MongoDB**, execute a Write-Through back to Redis so the next click is fast, and then redirect the user."
+### 1. URL Creation Flow (The Write Path)
+> "When a Marketer wants to create a new link, they authenticate via Clerk and use the Dashboard. The backend first performs a collision check in **MongoDB** to see if that exact URL was already shortened by that workspace. If not, it generates a unique 6-character code, saves it to MongoDB, and *pre-warms* the **Upstash Redis** cache so the very first click is instantly fast."
 
-### 2. Asynchronous Event Pipeline (The Analytics)
-> "Redirecting the user is priority #1, so analytics are processed *asynchronously* so they never slow down the redirect. Once the redirect fires, a background process updates the click count and geographic metrics in **MongoDB**, pushes a server-side event to **Google Analytics 4 (GA4)** via the Measurement Protocol, and fires a real-time **Webhook** payload to the customer's CRM."
+### 2. High-Speed Redirection Flow (The Read Path)
+> "When an end user clicks a short link, the request hits Vercel's Edge Network. To achieve sub-10ms global redirects, the Next.js Serverless function immediately queries **Upstash Redis**. If it's a Cache Hit, we redirect the user instantly. If it's a Cache Miss, we query **MongoDB**, execute a Write-Through back to Redis, and then redirect the user."
 
-### 3. Management & Reporting (The B2B SaaS Layer)
-> "For the marketing teams using the product, all authentication and multi-tenant workspace isolation is handled by **Clerk**. Once authenticated, they access the Next.js Dashboard which fetches real-time aggregated metrics directly from MongoDB."
+### 3. Asynchronous Event Pipeline (The Analytics)
+> "Redirecting the user is priority #1, so analytics are processed *asynchronously*. Once the redirect fires, a background process updates the click count and geographic metrics in **MongoDB**, pushes a server-side event to **Google Analytics 4 (GA4)** via the Measurement Protocol, and fires a real-time **Webhook** payload to the customer's CRM."
+
+### 4. Management & Reporting (The B2B SaaS Layer)
+> "For the marketing teams using the product, all authentication and multi-tenant workspace isolation is handled securely by **Clerk**. Once authenticated, the Next.js Dashboard fetches real-time aggregated metrics directly from MongoDB so they can monitor their campaign's success."
